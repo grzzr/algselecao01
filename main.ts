@@ -1,11 +1,18 @@
-// Use as funções de movimentação em uma sequência que leve o macaquinho até o acostamento do outro lado da avenida e sem bater em nenhuma árvore.
+function encontrou_arbusto () {
+    return tiles.tileAtLocationEquals(grid.getLocation(mySprite), sprites.builtin.forestTiles0)
+}
+// A mensagem "Achei o arbusto!" só pode ser exibida se o macaquinho encontrou o arbusto.
 // 
+// A função 'encontrou_arbusto' retorna true/false e pode ser usada para detectar o arbusto.
 function solucionar () {
-	
+    game.splash("Encontrei o arbusto!")
 }
 function esquerda (aSprite: Sprite) {
     grid.move(aSprite, -1, 0)
     pause(200)
+}
+function mostrar_tarefa () {
+    game.showLongText("Escreva uma condição para a exibição da mensagem.", DialogLayout.Bottom)
 }
 function subir (aSprite: Sprite) {
     grid.move(aSprite, 0, -1)
@@ -16,10 +23,7 @@ function inicializar () {
     tiles.setCurrentTilemap(tilemap`tabuleiro_tiles`)
     mySprite = sprites.create(assets.image`personagem`, SpriteKind.Player)
     mySprite.setStayInScreen(true)
-    grid.place(mySprite, tiles.getTileLocation(5, 7))
-}
-function mostrar_tarefa () {
-    game.showLongText("Ajude o macaquinho a atravessar a rua.", DialogLayout.Bottom)
+    grid.place(mySprite, tiles.getTileLocation(1, 6))
 }
 function direita (aSprite: Sprite) {
     grid.move(aSprite, 1, 0)
@@ -33,13 +37,7 @@ let mySprite: Sprite = null
 inicializar()
 mostrar_tarefa()
 solucionar()
-game.onUpdate(function () {
-    if (grid.spriteRow(mySprite) == 1) {
-        game.gameOver(true)
-        game.setGameOverEffect(true, effects.confetti)
-    }
-    if (tiles.tileAtLocationEquals(grid.getLocation(mySprite), sprites.builtin.forestTiles0)) {
-        game.showLongText("Bateu! Reescreva a solução e tente novamente.", DialogLayout.Bottom)
-        grid.place(mySprite, tiles.getTileLocation(5, 7))
-    }
+game.onUpdateInterval(500, function () {
+    direita(mySprite)
+    solucionar()
 })
